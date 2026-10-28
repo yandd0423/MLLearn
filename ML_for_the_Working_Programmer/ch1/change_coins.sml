@@ -66,3 +66,17 @@ val ans = change (gb_coins, 16);
 val ans = change_all ([5,2], 16, []);
 val ans = change_all (gb_coins, 16, []);
 
+
+exception Change;
+
+fun backChange (_, 0) = []
+  | backChange ([], amount) = raise Change
+  | backChange (c::coinvals, amount) = 
+                        if amount < 0 then raise Change
+                                      else c :: backChange(c::coinvals, amount - c) handle
+                                        Change => backChange(coinvals, amount);
+
+(* backChange ([10,2], 27); *)
+backChange ([5,2], 16);
+backChange (gb_coins, 16);
+
